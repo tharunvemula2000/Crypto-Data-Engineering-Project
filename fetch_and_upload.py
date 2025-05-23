@@ -33,8 +33,8 @@ def fetch_and_upload():
         return
 
     s3 = boto3.client('s3',
-        aws_access_key_id='AKIA6GSNGXEGBTD3JRF4',
-        aws_secret_access_key='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'
+        aws_access_key_id='*************************',
+        aws_secret_access_key='*******************************'
     )
 
     filename = f"crypto_{datetime.now(timezone.utc).isoformat()}.json"
