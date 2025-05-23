@@ -1,0 +1,60 @@
+CREATE WAREHOUSE IF NOT EXISTS crypto_wh
+  WITH WAREHOUSE_SIZE = 'XSMALL'
+  WAREHOUSE_TYPE = 'STANDARD'
+  AUTO_SUSPEND = 300
+  AUTO_RESUME = TRUE;
+
+CREATE DATABASE IF NOT EXISTS crypto_db;
+USE DATABASE crypto_db;
+USE SCHEMA PUBLIC;
+
+CREATE OR REPLACE TABLE dim_crypto (
+  id STRING,
+  symbol STRING,
+  name STRING,
+  image STRING
+);
+
+CREATE OR REPLACE TABLE fact_crypto_prices (
+  crypto_id STRING,
+  current_price FLOAT,
+  market_cap DOUBLE,
+  market_cap_rank INT,
+  fully_diluted_valuation DOUBLE,
+  total_volume DOUBLE,
+  high_24h FLOAT,
+  low_24h FLOAT,
+  price_change_24h FLOAT,
+  price_change_percentage_24h FLOAT,
+  market_cap_change_24h DOUBLE,
+  market_cap_change_percentage_24h FLOAT,
+  circulating_supply DOUBLE,
+  total_supply DOUBLE,
+  max_supply DOUBLE,
+  ath FLOAT,
+  ath_change_percentage FLOAT,
+  ath_date TIMESTAMP,
+  atl FLOAT,
+  atl_change_percentage FLOAT,
+  atl_date TIMESTAMP,
+  roi_times FLOAT,
+  roi_currency STRING,
+  roi_percentage FLOAT,
+  last_updated TIMESTAMP,
+  load_time TIMESTAMP
+);
+
+
+select * from dim_crypto
+select * from fact_crypto_prices
+
+
+CREATE OR REPLACE VIEW CRYPTO_DB.PUBLIC.VW_PRICES_ENRICHED AS
+SELECT 
+    f.*,
+    d.name,
+    d.symbol
+FROM 
+    FACT_CRYPTO_PRICES f
+JOIN 
+    DIM_CRYPTO d ON f.crypto_id = d.id;
